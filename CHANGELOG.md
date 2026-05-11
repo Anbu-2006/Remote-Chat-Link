@@ -9,3 +9,4 @@ Release notes and development milestones.
 - [2026-05-11 15:18] feat(ui): design sleek modern chat room interface with typing indicators and voice notes
 - [2026-05-11 16:44] perf(audio): compress voice messages using Opus codec at 24kbps
 - [2026-05-11 18:10] feat(ephemeral): implement configurable message self-destruct timers
+- [2026-05-11 19:36] style(chat): add floating reaction bar and message reply quotation preview
