@@ -32,3 +32,4 @@ Release notes and development milestones.
 - [2026-05-15 10:39] style(chat): add floating reaction bar and message reply quotation preview
 - [2026-05-15 11:08] test(webrtc): simulate ICE candidate trickle and connection establishment
 - [2026-05-15 11:38] docs(security): document cryptographic key exchange and ephemeral session lifecycle
+- [2026-05-15 12:07] feat(webrtc): implement peer-to-peer WebRTC mesh topology with STUN/TURN failover
