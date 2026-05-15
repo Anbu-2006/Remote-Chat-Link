@@ -40,3 +40,4 @@ Release notes and development milestones.
 - [2026-05-15 14:34] perf(audio): compress voice messages using Opus codec at 24kbps
 - [2026-05-15 15:03] feat(ephemeral): implement configurable message self-destruct timers
 - [2026-05-15 15:32] style(chat): add floating reaction bar and message reply quotation preview
+- [2026-05-15 16:02] test(webrtc): simulate ICE candidate trickle and connection establishment
