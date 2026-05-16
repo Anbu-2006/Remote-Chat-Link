@@ -65,3 +65,4 @@ Release notes and development milestones.
 - [2026-05-16 15:32] feat(webrtc): implement peer-to-peer WebRTC mesh topology with STUN/TURN failover
 - [2026-05-16 16:13] feat(crypto): add end-to-end AES-GCM 256-bit encryption for direct message payloads
 - [2026-05-16 16:54] feat(file): support chunked binary file transfers with integrity SHA-256 verification
+- [2026-05-16 17:35] fix(signaling): handle socket disconnects and renegotiation during network handover
