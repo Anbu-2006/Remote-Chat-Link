@@ -98,3 +98,4 @@ Release notes and development milestones.
 - [2026-05-20 14:31] fix(signaling): handle socket disconnects and renegotiation during network handover
 - [2026-05-20 15:23] feat(ui): design sleek modern chat room interface with typing indicators and voice notes
 - [2026-05-20 16:16] perf(audio): compress voice messages using Opus codec at 24kbps
+- [2026-05-20 17:08] feat(ephemeral): implement configurable message self-destruct timers
