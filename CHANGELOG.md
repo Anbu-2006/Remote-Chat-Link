@@ -93,3 +93,4 @@ Release notes and development milestones.
 - [2026-05-20 10:08] test(webrtc): simulate ICE candidate trickle and connection establishment
 - [2026-05-20 11:01] docs(security): document cryptographic key exchange and ephemeral session lifecycle
 - [2026-05-20 11:53] feat(webrtc): implement peer-to-peer WebRTC mesh topology with STUN/TURN failover
+- [2026-05-20 12:46] feat(crypto): add end-to-end AES-GCM 256-bit encryption for direct message payloads
