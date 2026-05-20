@@ -97,3 +97,4 @@ Release notes and development milestones.
 - [2026-05-20 13:38] feat(file): support chunked binary file transfers with integrity SHA-256 verification
 - [2026-05-20 14:31] fix(signaling): handle socket disconnects and renegotiation during network handover
 - [2026-05-20 15:23] feat(ui): design sleek modern chat room interface with typing indicators and voice notes
+- [2026-05-20 16:16] perf(audio): compress voice messages using Opus codec at 24kbps
