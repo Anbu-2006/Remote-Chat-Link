@@ -126,3 +126,4 @@ Release notes and development milestones.
 - [2026-05-24 17:34] feat(crypto): add end-to-end AES-GCM 256-bit encryption for direct message payloads
 - [2026-05-24 19:13] feat(file): support chunked binary file transfers with integrity SHA-256 verification
 - [2026-05-24 20:52] fix(signaling): handle socket disconnects and renegotiation during network handover
+- [2026-05-25 09:17] feat(ui): design sleek modern chat room interface with typing indicators and voice notes
