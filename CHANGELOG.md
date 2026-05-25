@@ -141,3 +141,4 @@ Release notes and development milestones.
 - [2026-05-25 16:42] feat(ephemeral): implement configurable message self-destruct timers
 - [2026-05-25 17:19] style(chat): add floating reaction bar and message reply quotation preview
 - [2026-05-25 17:57] test(webrtc): simulate ICE candidate trickle and connection establishment
+- [2026-05-25 18:34] docs(security): document cryptographic key exchange and ephemeral session lifecycle
