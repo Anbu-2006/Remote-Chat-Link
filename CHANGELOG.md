@@ -154,3 +154,4 @@ Release notes and development milestones.
 - [2026-05-27 16:44] docs(security): document cryptographic key exchange and ephemeral session lifecycle
 - [2026-05-27 18:35] feat(webrtc): implement peer-to-peer WebRTC mesh topology with STUN/TURN failover
 - [2026-05-27 20:26] feat(crypto): add end-to-end AES-GCM 256-bit encryption for direct message payloads
+- [2026-05-28 09:36] feat(file): support chunked binary file transfers with integrity SHA-256 verification
