@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Antigravity Mobile Console</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" href="icon.png">
+    <!-- Google Fonts for professional typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then(reg => console.log('Service Worker registered', reg))
+                    .catch(err => console.error('Service Worker registration failed', err));
+            });
+        }
+    </script>
+</head>
+<body>
+    <div id="app">
+        <!-- Realtime Mirrored Desktop Screen -->
+        <div id="screenContainer">
+            <video id="screenVideo" autoplay playsinline></video>
+            <div id="touchLayer"></div>
+            <!-- Thumb-scroll side bar overlay -->
+            <div id="scrollZone" aria-label="Scroll Zone"></div>
+        </div>
+
+        <!-- Upper Hud HUD Details Overlay -->
+        <div id="uiOverlay">
+            <div class="top-bar">
+                <div class="status">
+                    <span class="live-dot"></span>
+                    LIVE • REM-STREAM PC
+                </div>
+                <div style="display: flex; gap: 10px; align-items: center; pointer-events: auto;">
+                    <div id="latency">0ms</div>
+                    <button id="keyboardCloseBtn" class="dismiss-kb-btn" aria-label="Close Keyboard">⌨️ ✖</button>
+                </div>
+            </div>
+
+            <!-- Zoom Control Overlay Panel -->
+            <div id="zoomOverlay" class="zoom-overlay hidden">
+                <button class="zoom-btn" id="zoomInBtn">➕ Zoom In</button>
+                <button class="zoom-btn" id="zoomOutBtn">➖ Zoom Out</button>
+            </div>
+        </div>
+
+        <!-- Hidden input for mobile keyboard capture -->
+        <input type="text" id="mobileTextInput" autocomplete="off" autocapitalize="none">
+
+        <!-- Connection State Overlays -->
+        <div id="offlineOverlay" class="offline-overlay">
+            <div class="msg-card">
+                <h2>Connection Required</h2>
+                <p>Establishing handshakes with signaling node...</p>
+                <div class="loader"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,347 @@
+:root {
+    --bg-dark: #06060c;
+    --accent-cyan: #00f2ff;
+    --accent-pink: #ff0055;
+    --panel-bg: rgba(18, 18, 30, 0.7);
+    --border-color: rgba(255, 255, 255, 0.08);
+    --safe-bottom: env(safe-area-inset-bottom);
+    --safe-top: env(safe-area-inset-top);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+    font-family: 'Outfit', -apple-system, sans-serif;
+}
+
+body {
+    background: var(--bg-dark);
+    color: white;
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+}
+
+#app {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+#screenContainer {
+    flex: 1;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #000;
+    position: relative;
+}
+
+#screenVideo {
+    width: 100%;
+    height: 100%;
+    object-fit: fill;
+    background: #000;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+}
+
+#touchLayer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+}
+
+#scrollZone {
+    display: none;
+}
+
+#uiOverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 20;
+    display: flex;
+    flex-direction: column;
+}
+
+.top-bar {
+    padding: calc(14px + var(--safe-top)) 20px 14px;
+    background: linear-gradient(to bottom, rgba(6, 6, 12, 0.95), transparent);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.status {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--accent-cyan);
+    text-shadow: 0 0 10px rgba(0, 242, 255, 0.4);
+}
+
+.live-dot {
+    width: 7px;
+    height: 7px;
+    background: var(--accent-pink);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--accent-pink);
+    animation: blink 1.2s infinite;
+}
+
+@keyframes blink { 
+    0%, 100% { opacity: 1; transform: scale(1); } 
+    50% { opacity: 0.3; transform: scale(0.8); } 
+}
+
+#latency {
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-color);
+    padding: 3px 8px;
+    border-radius: 20px;
+}
+
+/* Bottom Chat Console styling */
+#bottomConsole {
+    background: var(--panel-bg);
+    backdrop-filter: blur(20px);
+    border-top: 1px solid var(--border-color);
+    padding: 10px 14px calc(10px + var(--safe-bottom));
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 40;
+    pointer-events: auto;
+}
+
+.console-input-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    width: 100%;
+}
+
+#mobileTextInput {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 10px;
+    padding: 10px 14px;
+    color: white;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s ease;
+}
+
+#mobileTextInput:focus {
+    border-color: var(--accent-cyan);
+    box-shadow: 0 0 10px rgba(0, 242, 255, 0.2);
+}
+
+.send-btn {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: var(--accent-cyan);
+    color: #000;
+    border: none;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(0, 242, 255, 0.2);
+    transition: all 0.2s ease;
+}
+
+.send-btn:active {
+    background: #00d3e0;
+    transform: scale(0.92);
+}
+
+.console-buttons-row {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    width: 100%;
+}
+
+.tool-btn {
+    height: 38px;
+    flex: 1;
+    max-width: 110px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--border-color);
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 12px;
+    font-weight: 600;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.tool-btn:active {
+    transform: scale(0.95);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.tool-btn.active {
+    background: var(--accent-cyan);
+    color: #000;
+    border-color: var(--accent-cyan);
+    box-shadow: 0 0 15px rgba(0, 242, 255, 0.4);
+}
+
+/* Connection Overlay Card */
+.offline-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(4, 4, 8, 0.9);
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(10px);
+    transition: opacity 0.3s ease;
+}
+
+.offline-overlay.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.msg-card {
+    background: rgba(14, 14, 25, 0.8);
+    border: 1px solid var(--border-color);
+    padding: 36px 28px;
+    border-radius: 24px;
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+    max-width: 320px;
+    width: 90%;
+}
+
+.msg-card h2 { 
+    color: var(--accent-cyan); 
+    font-size: 20px; 
+    font-weight: 800;
+    margin-bottom: 8px; 
+}
+
+.msg-card p { 
+    color: rgba(255, 255, 255, 0.6); 
+    font-size: 13px; 
+    line-height: 1.5;
+    margin-bottom: 24px; 
+}
+
+.loader {
+    width: 28px;
+    height: 28px;
+    border: 3px solid rgba(255, 255, 255, 0.1);
+    border-top-color: var(--accent-cyan);
+    border-radius: 50%;
+    animation: spin 0.9s infinite linear;
+    margin: 0 auto;
+}
+
+@keyframes spin { 
+    to { transform: rotate(360deg); } 
+}
+
+/* Zoom Control Panel Overlay */
+.zoom-overlay {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    padding: 12px;
+    margin-bottom: 8px;
+    pointer-events: auto;
+    transition: all 0.2s ease;
+}
+
+.zoom-overlay.hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(10px);
+}
+
+.zoom-btn {
+    height: 40px;
+    padding: 0 16px;
+    border-radius: 20px;
+    background: var(--panel-bg);
+    border: 1px solid var(--border-color);
+    color: white;
+    font-size: 13px;
+    font-weight: 600;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s ease;
+}
+
+.zoom-btn:active {
+    transform: scale(0.95);
+    background: rgba(255, 255, 255, 0.15);
+}
+
+/* Hidden off-screen text input for keyboard capture */
+#mobileTextInput {
+    position: absolute;
+    left: -9999px;
+    top: -9999px;
+    width: 1px;
+    height: 1px;
+    opacity: 0.01;
+    pointer-events: none;
+}
+
+/* Translucent HUD Close Keyboard button */
+.dismiss-kb-btn {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--border-color);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    backdrop-filter: blur(10px);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.dismiss-kb-btn:active {
+    transform: scale(0.92);
+    background: rgba(255, 255, 255, 0.15);
+}

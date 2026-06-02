@@ -1,0 +1,18 @@
+{
+  "name": "Antigravity Remote Console",
+  "short_name": "AG Remote",
+  "description": "Full remote screen mirroring and input control console.",
+  "start_url": ".",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#06060c",
+  "theme_color": "#00f2ff",
+  "icons": [
+    {
+      "src": "icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

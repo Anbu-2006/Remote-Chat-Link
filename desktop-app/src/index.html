@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Antigravity Remote Console</title>
+  <!-- Google Fonts for modern typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #080810;
+      --panel-bg: rgba(20, 20, 35, 0.6);
+      --border-color: rgba(255, 255, 255, 0.08);
+      --accent-cyan: #00f2ff;
+      --accent-pink: #ff007f;
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+      --glass-blur: blur(16px);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+    }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: radial-gradient(circle at 50% 0%, #151528 0%, var(--bg-dark) 70%);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding: 24px;
+      overflow-x: hidden;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 16px;
+    }
+
+    h1 {
+      font-size: 28px;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-pink));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -0.5px;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    .dashboard {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      flex: 1;
+    }
+
+    /* Glassmorphism Card Style */
+    .glass-card {
+      background: var(--panel-bg);
+      backdrop-filter: var(--glass-blur);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    }
+
+    .card-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text-main);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      padding-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Connection Card Details */
+    .status-badge {
+      font-size: 12px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      background: rgba(255, 64, 129, 0.1);
+      color: var(--accent-pink);
+      border: 1px solid rgba(255, 64, 129, 0.2);
+      align-self: flex-start;
+      font-weight: 600;
+    }
+
+    .status-badge.connected {
+      background: rgba(0, 242, 255, 0.1);
+      color: var(--accent-cyan);
+      border: 1px solid rgba(0, 242, 255, 0.2);
+    }
+
+    .qr-container {
+      background: white;
+      padding: 12px;
+      border-radius: 12px;
+      display: flex;
+      justify-content: center;
+      align-self: center;
+      box-shadow: 0 0 20px rgba(0, 242, 255, 0.2);
+    }
+
+    #qrCanvas {
+      display: none;
+    }
+
+    .pin-box {
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 10px;
+      padding: 12px;
+      text-align: center;
+      border: 1px dashed rgba(255, 255, 255, 0.1);
+    }
+
+    .pin-label {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .pin-number {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--accent-cyan);
+      letter-spacing: 2px;
+    }
+
+    .wifi-link {
+      font-size: 11px;
+      color: var(--text-muted);
+      word-break: break-all;
+      margin-top: 8px;
+    }
+
+    .wifi-link a {
+      color: var(--accent-cyan);
+      text-decoration: none;
+    }
+
+    .wifi-link a:hover {
+      text-decoration: underline;
+    }
+
+    /* Source Cards Grid */
+    .source-scroller {
+      overflow-y: auto;
+      max-height: 280px;
+      padding-right: 4px;
+    }
+
+    .source-scroller::-webkit-scrollbar {
+      width: 6px;
+    }
+    .source-scroller::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .source-scroller::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+    }
+
+    .sources-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .source-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+      padding: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: all 0.2s ease;
+    }
+
+    .source-card:hover {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(0, 242, 255, 0.3);
+    }
+
+    .source-card.selected {
+      background: rgba(0, 242, 255, 0.05);
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 10px rgba(0, 242, 255, 0.15);
+    }
+
+    .source-card img {
+      width: 70px;
+      height: 44px;
+      object-fit: cover;
+      border-radius: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .source-card .title {
+      font-size: 13px;
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      flex: 1;
+    }
+
+    /* Center Preview Screen Console */
+    .stream-console {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .preview-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .control-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-main);
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .btn:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .btn.primary {
+      background: var(--accent-cyan);
+      color: #000;
+      border-color: var(--accent-cyan);
+    }
+
+    .btn.primary:hover {
+      background: #00d3e0;
+      box-shadow: 0 0 12px rgba(0, 242, 255, 0.3);
+    }
+
+    /* Live Preview & Cropper */
+    .viewport-outer {
+      background: #000;
+      border-radius: 16px;
+      border: 1px solid var(--border-color);
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.8);
+      min-height: 400px;
+    }
+
+    .preview-container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      max-width: 100%;
+      max-height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #previewVideo {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: fill;
+      display: block;
+      border-radius: 8px;
+    }
+
+    /* Draggable Crop Box */
+    .crop-box {
+      position: absolute;
+      border: 2px solid var(--accent-cyan);
+      background: rgba(0, 242, 255, 0.06);
+      box-shadow: 0 0 25px rgba(0, 242, 255, 0.3), inset 0 0 20px rgba(0, 242, 255, 0.1);
+      cursor: move;
+      touch-action: none;
+    }
+
+    .crop-box-grid {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      border: 1px dashed rgba(255, 255, 255, 0.25);
+    }
+
+    /* Rule of Thirds Lines */
+    .crop-box-grid::before, .crop-box-grid::after {
+      content: '';
+      position: absolute;
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .crop-box-grid::before {
+      top: 33.33%;
+      bottom: 33.33%;
+      left: 0;
+      right: 0;
+      border-top: 1px dashed rgba(255, 255, 255, 0.25);
+      border-bottom: 1px dashed rgba(255, 255, 255, 0.25);
+    }
+
+    .crop-box-grid::after {
+      left: 33.33%;
+      right: 33.33%;
+      top: 0;
+      bottom: 0;
+      border-left: 1px dashed rgba(255, 255, 255, 0.25);
+      border-right: 1px dashed rgba(255, 255, 255, 0.25);
+    }
+
+    .crop-label {
+      position: absolute;
+      top: 6px;
+      left: 6px;
+      background: rgba(8, 8, 16, 0.85);
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--accent-cyan);
+      border: 1px solid rgba(0, 242, 255, 0.3);
+      pointer-events: none;
+    }
+
+    /* Resize Handles */
+    .handle {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      background: var(--accent-cyan);
+      border: 2px solid var(--bg-dark);
+      border-radius: 50%;
+      box-shadow: 0 0 8px rgba(0, 242, 255, 0.8);
+      z-index: 10;
+    }
+
+    .handle.nw { top: -6px; left: -6px; cursor: nwse-resize; }
+    .handle.ne { top: -6px; right: -6px; cursor: nesw-resize; }
+    .handle.sw { bottom: -6px; left: -6px; cursor: nesw-resize; }
+    .handle.se { bottom: -6px; right: -6px; cursor: nwse-resize; }
+
+    /* Footer styling */
+    footer {
+      text-align: center;
+      margin-top: 24px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div>
+      <h1>Antigravity Remote Console</h1>
+      <div class="subtitle">Direct desktop workspace replication & live precision crop-sharing</div>
+    </div>
+    <div id="connectionStatus" class="status-badge">DISCONNECTED</div>
+  </header>
+
+  <div class="dashboard">
+    <!-- Left column -->
+    <!-- Top row: Connection and Sources side-by-side -->
+    <div style="display: flex; gap: 24px; width: 100%;">
+      <!-- Connection Card -->
+      <div class="glass-card" style="width: 320px; flex-shrink: 0;">
+        <div class="card-title">
+          <span>📡 Connection Hub</span>
+        </div>
+        <p id="statusText" style="font-size: 13px; color: var(--text-muted); text-align: center;">
+          Initializing session secure tunnels...
+        </p>
+        <div class="qr-container">
+          <canvas id="qrCanvas"></canvas>
+        </div>
+        <div class="pin-box">
+          <div class="pin-label">SESSION CO-PAIRING PIN</div>
+          <div id="pinVal" class="pin-number">------</div>
+          <div id="pinDisplay" class="wifi-link" style="display: none;"></div>
+        </div>
+      </div>
+
+      <!-- Sources Select Card -->
+      <div class="glass-card" style="flex: 1;">
+        <div class="card-title">
+          <span>🖥️ Sharing Source</span>
+        </div>
+        <div class="source-scroller">
+          <div class="sources-grid" id="sourcesGrid">
+            <p style="font-size: 13px; color: var(--text-muted);">Fetching display inputs...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right column: Stream Console -->
+    <div class="glass-card" style="flex: 1;">
+      <div class="preview-header">
+        <div class="card-title" style="border-bottom: none; padding-bottom: 0;">
+          <span>🎥 Live Crop Window Viewport</span>
+        </div>
+        <div class="control-actions">
+          <button class="btn" id="resetCropBtn">🔄 Reset Area</button>
+          <button class="btn primary" id="lockAspectBtn">🔒 Snap Aspect</button>
+        </div>
+      </div>
+      
+      <div class="viewport-outer">
+        <div class="preview-container" id="previewContainer">
+          <video id="previewVideo" autoplay muted></video>
+          <!-- Drag / Crop Area Box Overlay -->
+          <div id="cropBox" class="crop-box">
+            <div class="crop-box-grid"></div>
+            <div class="handle nw"></div>
+            <div class="handle ne"></div>
+            <div class="handle sw"></div>
+            <div class="handle se"></div>
+            <div class="crop-label">Cropped Stream Area</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    Antigravity Remote Client Engine v1.0.0 • Protected P2P Handshake Protocol
+  </footer>
+
+  <!-- Canvas used to yield the cropped stream -->
+  <canvas id="cropCanvas" style="display: none;"></canvas>
+
+  <!-- External libraries -->
+  <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+  <script src="renderer.js"></script>
+</body>
+</html>

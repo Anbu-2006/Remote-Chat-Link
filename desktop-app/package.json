@@ -1,0 +1,52 @@
+{
+  "name": "antigravity-remote-control",
+  "displayName": "Antigravity Remote Control",
+  "version": "1.0.0",
+  "description": "Full remote control of your Antigravity IDE session from mobile",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "set CSC_IDENTITY_AUTO_DISCOVERY=false&& electron-builder --win",
+    "dev": "electron ."
+  },
+  "dependencies": {
+    "express": "^5.2.1",
+    "koffi": "^2.9.0",
+    "localtunnel": "^2.0.2",
+    "qrcode": "^1.5.3"
+  },
+  "devDependencies": {
+    "electron": "^28.0.0",
+    "electron-builder": "^24.9.1"
+  },
+  "build": {
+    "appId": "com.anbutech.antigravity-remote",
+    "productName": "Antigravity Remote Control",
+    "win": {
+      "target": "nsis",
+      "icon": "icon.png"
+    },
+    "nsis": {
+      "oneClick": true,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": false,
+      "createDesktopShortcut": false,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Antigravity Remote Backend",
+      "artifactName": "AntigravityRemoteSetup.exe"
+    },
+    "files": [
+      "src/**/*",
+      "resources/**/*"
+    ],
+    "extraResources": [
+      {
+        "from": "../mobile-app",
+        "to": "mobile-app",
+        "filter": [
+          "**/*"
+        ]
+      }
+    ]
+  }
+}
